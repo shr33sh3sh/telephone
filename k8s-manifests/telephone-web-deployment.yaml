@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telephone-web
+  namespace: telephone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telephone-web
+  template:
+    metadata:
+      labels:
+        app: telephone-web
+    spec:
+      containers:
+      - name: telephone-web
+        image: telephone-web:42056
+        ports:
+        - containerPort: 5000

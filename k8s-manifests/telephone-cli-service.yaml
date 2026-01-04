@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: telephone-postgres
+  name: telephone-cli-service
   namespace: telephone
 spec:
   selector:
-    app: telephone-postgres
+    app: telephone-cli
   ports:
-  - port: 5432
-    targetPort: 5432
+  - port: 80
+    targetPort: 80
   type: ClusterIP

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telephone-cli
+  namespace: telephone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telephone-cli
+  template:
+    metadata:
+      labels:
+        app: telephone-cli
+    spec:
+      containers:
+      - name: telephone-cli
+        image: telephone-cli:42056
+        ports:
+        - containerPort: 80
