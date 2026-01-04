@@ -78,4 +78,4 @@ Click "Add Contact" to create new entries
 
 Use edit/delete buttons to manage contacts
 
-Export all contacts as CSV
+Export all contacts as CSV# telephone
