@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telephone-postgres
+  namespace: telephone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telephone-postgres
+  template:
+    metadata:
+      labels:
+        app: telephone-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16
+        ports:
+        - containerPort: 5432
+        env:
+        # PostgreSQL-specific environment variables (REQUIRED by postgres image)
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: telephone-config
+              key: DATABASE_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: telephone-secret
+              key: DATABASE_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: telephone-secret
+              key: DATABASE_PASSWORD
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres  # Important: prevents permission issues
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - postgres
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - postgres
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: telephone-postgres-pvc
+      - name: init-script
+        configMap:
+          name: telephone-postgres-init

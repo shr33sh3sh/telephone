@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cli-job
+  namespace: phone-directory
+spec:
+  template:
+    spec:
+      containers:
+      - name: cli
+        image: phone-directory-cli:latest  # Build this from your Dockerfile
+        imagePullPolicy: Never
+        command: ["python", "phone_directory.py"]
+        env:
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: phone-directory-config
+              key: DATABASE_HOST
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: phone-directory-config
+              key: DATABASE_PORT
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: phone-directory-config
+              key: DATABASE_NAME
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: phone-directory-secrets
+              key: DATABASE_USER
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: phone-directory-secrets
+              key: DATABASE_PASSWORD
+      restartPolicy: Never
+  backoffLimit: 3

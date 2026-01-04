@@ -1,0 +1,4 @@
+# File: cli/requirements.txt
+#psycopg2==2.9.9
+# For CLI
+git+https://github.com/psycopg/psycopg2@master#egg=psycopg2

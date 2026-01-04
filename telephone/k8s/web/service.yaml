@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: phone-directory
+spec:
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 5000
+    nodePort: 30025  # Will be accessible on each node at port 30025
+  type: NodePort
