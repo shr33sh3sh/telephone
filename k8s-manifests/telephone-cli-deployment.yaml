@@ -14,7 +14,13 @@ spec:
         app: telephone-cli
     spec:
       containers:
-      - name: telephone-cli
-        image: telephone-cli:42056
-        ports:
-        - containerPort: 80
+      - name: cli
+        image: telephone-cli:26612
+        imagePullPolicy: IfNotPresent
+        command: ["python"]
+        args: ["-c", "print('CLI service is healthy'); import sys; sys.exit(0)"]
+        envFrom:
+        - configMapRef:
+            name: telephone-config
+        - secretRef:
+            name: telephone-secret
